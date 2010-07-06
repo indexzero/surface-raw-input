@@ -1,7 +1,7 @@
-## Surface Raw Input Toolkit
+# Surface Raw Input Toolkit
 ---
 
-# PROJECT UNDER DEVELOPMENT
+## PROJECT UNDER DEVELOPMENT
 
 ---
 #### Author: [Charlie Robbins](http://www.charlierobbins.com), MIT LICENSED
