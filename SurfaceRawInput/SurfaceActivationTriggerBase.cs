@@ -12,6 +12,10 @@ namespace SurfaceRawInput
     using System.Linq;
     using System.Text;
     using System.Windows;
+    using System.Windows.Media;
+    using System.Windows.Controls;
+    using Microsoft.Surface.Presentation.Controls;
+    using System.Drawing;
 
     /// <summary>
     /// Base class for Triggers based on intensity of raw input from the Microsoft Surface.
@@ -24,7 +28,7 @@ namespace SurfaceRawInput
             "ActivationIntensity",
             typeof(int),
             typeof(SurfaceGotActivationTrigger),
-            new FrameworkPropertyMetadata(5));
+            new FrameworkPropertyMetadata(10));
 
         #endregion Dependency Properties 
 
@@ -61,15 +65,19 @@ namespace SurfaceRawInput
         /// <param name="rawImage">The raw image.</param>
         public override void OnRawImageCaptured(byte[] rawImage)
         {
+            Vector offset = this.GetTotalOffset();
+            Rectangle cropToLegacy = new Rectangle((int)offset.X, (int)offset.Y, (int)this.AssociatedObject.ActualWidth, (int)this.AssociatedObject.ActualHeight);
+            cropToLegacy = SurfaceRawImageCaptureBehavior.ScaleBoundingBox(cropToLegacy);
+
             int minX = int.MaxValue;
             int minY = int.MaxValue;
             int maxX = 0;
             int maxY = 0;
             bool found = false;
 
-            for (int row = 0; row < 576; row += 2)
+            for (int row = cropToLegacy.Y; row < cropToLegacy.Y + cropToLegacy.Height; row += 2)
             {
-                for (int col = 0; col < 768; col += 2)
+                for (int col = cropToLegacy.X; col < cropToLegacy.X + cropToLegacy.Width; col += 2)
                 {
                     // TODO: Refine this algorithm to find an area of intensity
                     if (rawImage[(row * 768) + col] > this.ActivationIntensity)
@@ -97,6 +105,21 @@ namespace SurfaceRawInput
                 this.gotActivation = false;
                 this.OnLostActivation(rawImage);
             }
+        }
+
+        private Vector GetTotalOffset()
+        {
+            Vector totalOffset = new Vector(0,0);
+            Visual visual = this.AssociatedObject as Visual;
+            while (!(visual is SurfaceWindow))
+            {
+                Vector offset = VisualTreeHelper.GetOffset(visual);
+                totalOffset.X += offset.X;
+                totalOffset.Y += offset.Y;
+                visual = VisualTreeHelper.GetParent(visual) as Visual;
+            }
+
+            return totalOffset;
         }
 
         /// <summary>

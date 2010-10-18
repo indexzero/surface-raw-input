@@ -229,9 +229,9 @@ namespace SurfaceRawInput
                 {
                     this.LastNormalizedImage = this.normalizedImage;
                     this.lastBehaviorPollAt = DateTime.Now;
-                    foreach (SurfaceRawImageTriggerBase behavior in rawImageListeners)
+                    foreach (ISurfaceRawImageAware imageAware in rawImageListeners)
                     {
-                        behavior.OnRawImageCaptured(this.normalizedImage);
+                        imageAware.OnRawImageCaptured(this.normalizedImage);
                     }
                 }
             }

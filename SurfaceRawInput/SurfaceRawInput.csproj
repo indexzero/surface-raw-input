@@ -78,7 +78,6 @@
     <Compile Include="SurfaceProcessRawImageBehavior.cs" />
     <Compile Include="SurfaceRawImageCaptureBehavior.cs" />
     <Compile Include="SurfaceRawImageTriggerBase.cs" />
-    <Compile Include="SurfaceWindowRawImageCapture.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -15,6 +15,19 @@ namespace SurfaceRawInput
     /// </summary>
     public class SurfaceRawImageTriggerBase : TriggerBase<FrameworkElement>, ISurfaceRawImageAware
     {
+        #region Dependency Properties
+
+        /// <summary>
+        /// Backing store for the CropTo property.
+        /// </summary>
+        public static readonly DependencyProperty ClipToBoundsProperty = DependencyProperty.Register(
+            "ClipToBounds",
+            typeof(bool),
+            typeof(SurfaceRawImageTriggerBase),
+            new FrameworkPropertyMetadata(true));
+
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SurfaceRawImageTriggerBase"/> class.
         /// </summary>
@@ -22,7 +35,22 @@ namespace SurfaceRawInput
         {
         }
 
-        #region Methods 
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the Rect that this instance should crop the 
+        /// raw Surface image to.
+        /// </summary>
+        /// <value>The crop to.</value>
+        public bool ClipToBounds
+        {
+            get { return (bool)GetValue(ClipToBoundsProperty); }
+            set { SetValue(ClipToBoundsProperty, value); }
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Called when a raw image is captured. 
@@ -39,7 +67,7 @@ namespace SurfaceRawInput
         protected override void OnAttached()
         {
             base.OnAttached();
-            SurfaceWindowRawImageCapture.AddRawImageCaptureBehavior(this);
+            SurfaceRawImageCaptureBehavior.AddRawImageListener(this);
         }
 
         /// <summary>
@@ -49,7 +77,7 @@ namespace SurfaceRawInput
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            SurfaceWindowRawImageCapture.RemoveRawImageCaptureBehavior(this);
+            SurfaceRawImageCaptureBehavior.RemoveRawImageListener(this);
         }
 
         #endregion Methods 

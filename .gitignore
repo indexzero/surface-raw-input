@@ -3,3 +3,4 @@ SurfaceRawInput/bin/*
 SurfaceRawInput/obj/
 SurfaceRawInput/obj/*
 *.suo
+.DS_Store
